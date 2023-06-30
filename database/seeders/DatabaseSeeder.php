@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Cart;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call(UserSeeder::class);
+        $this->call(BlogSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(BrandSeeder::class);
+        $this->call(ProductSeeder::class);
+        $this->call(ProductImageSeeder::class);
+        $this->call(ProductCommentSeeder::class);
+        $this->call(CartSeeder::class);
+        $this->call(CartProductsSeeder::class);
     }
 }
