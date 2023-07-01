@@ -11,4 +11,8 @@ class ProductComment extends Model
 
     protected $table = 'product_comments';
     protected $guarded = [];
+
+    public function user(){
+        return $this->hasOne(User::class,'id','user_id');
+    }
 }

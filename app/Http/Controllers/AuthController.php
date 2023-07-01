@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        // Hata var
+
         if ($validator->fails()) {
             return response()->json(["status" => 401, "errors" => $validator->errors()]);
         } else {
@@ -56,7 +56,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        // Hata var
+
         if ($validator->fails()) {
             return response()->json(["status" => 401, "errors" => $validator->errors()]);
         } else {
@@ -92,7 +92,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        // Hata var
+
         if ($validator->fails()) {
             return response()->json(["status" => 401, "errors" => $validator->errors()]);
         } else {
@@ -101,7 +101,7 @@ class AuthController extends Controller
             ];
 
             if ($request->email) {
-                $data['email']=$request->email;
+                $data['email'] = $request->email;
             }
 
             $user = User::where('id', Auth::id())->update($data);
@@ -128,7 +128,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        // Hata var
+
         if ($validator->fails()) {
             return response()->json(["status" => 401, "errors" => $validator->errors()]);
         } else {
