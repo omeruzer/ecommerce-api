@@ -36,7 +36,7 @@ class CategoryController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $category = Category::create([
                 'name' => $request->name,
@@ -56,7 +56,7 @@ class CategoryController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $category = Category::find($id);
 

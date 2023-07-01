@@ -21,7 +21,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $data = [
                 'email' =>  $request->email,
@@ -58,7 +58,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $user = User::create([
                 'name' => $request->name,
@@ -94,7 +94,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $data = [
                 'name' => $request->name,
@@ -130,7 +130,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $user = User::where('id', Auth::id())->first();
             $userPass = $user->password;

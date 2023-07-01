@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Str;
 
@@ -15,9 +16,10 @@ class ProductController extends Controller
 
         return response()->json($products);
     }
+
     public function detail($id)
     {
-        $products = Product::with('brand', 'category', 'comments.user', 'images')->find($id);
+        $products = Product::with('brand', 'category', 'comments.user')->find($id);
 
         if (!$products) {
             return response()->json(['data' => 'Product not found!', 'status' => 404], 404);
@@ -44,7 +46,7 @@ class ProductController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
         } else {
             $product = Product::create([
                 'name' => $request->name,
@@ -58,6 +60,21 @@ class ProductController extends Controller
                 'keywords' => $request->keywords,
                 'quantity' => $request->quantity,
             ]);
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+
+                // Benzersiz bir dosya adı oluşturun
+                $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+                // Dosyayı saklayın
+                Storage::disk('public')->put("media/" . $fileName, file_get_contents($image));
+
+                $product->image = $fileName;
+
+                $product->save();
+            }
+
 
             return response()->json($product);
         }
@@ -81,7 +98,7 @@ class ProductController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
         } else {
             $data = [
                 'name' => $request->name,
@@ -107,6 +124,22 @@ class ProductController extends Controller
 
             $product->update($data);
 
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+
+                $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+                Storage::disk('public')->put("media/" . $fileName, file_get_contents($image));
+
+                if ($product->image) {
+                    Storage::disk('public')->delete("media/" . $product->image);
+                }
+
+                $product->image = $fileName;
+
+                $product->save();
+            }
+
             return response()->json(['status' => true, 'message' => 'Updated']);
         }
     }
@@ -117,6 +150,9 @@ class ProductController extends Controller
 
         if (!$product) {
             return response()->json(['data' => 'Product not found!', 'status' => 404], 404);
+        }
+        if ($product->image) {
+            Storage::disk('public')->delete("media/" . $product->image);
         }
 
         $product->delete();

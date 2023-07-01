@@ -38,6 +38,6 @@ Route::prefix('product')->group(function () {
     Route::get('/', [ProductController::class, 'all']);
     Route::get('/{id}', [ProductController::class, 'detail']);
     Route::post('/', [ProductController::class, 'create']);
-    Route::patch('/{id}', [ProductController::class, 'edit']);
+    Route::post('/{id}', [ProductController::class, 'edit']);
     Route::delete('/{id}', [ProductController::class, 'remove']);
 });

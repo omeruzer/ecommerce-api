@@ -21,6 +21,7 @@ class ProductSeeder extends Seeder
             $productName = $faker->sentence(2);
 
             Product::create([
+                'image' => 'image_' . $i + 1 . '_sample.jpg',
                 'name' => $productName,
                 'slug' => Str::slug($productName),
                 'desc' => $faker->sentence(15),

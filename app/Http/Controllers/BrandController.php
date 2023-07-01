@@ -35,7 +35,7 @@ class BrandController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $brand = Brand::create([
                 'name' => $request->name,
@@ -55,7 +55,7 @@ class BrandController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 401, "errors" => $validator->errors()]);
+            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
         } else {
             $brand = Brand::find($id);
 
