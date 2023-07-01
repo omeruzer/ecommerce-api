@@ -7,6 +7,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
+use App\Http\Middleware\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,40 +28,65 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('order')->group(function () {
-        Route::get('/', [OrderController::class, 'index']);
-        Route::get('/{id}', [OrderController::class, 'detail']);
-        Route::post('/', [OrderController::class, 'create']);
-        Route::patch('/{id}', [OrderController::class, 'edit']);
-        Route::delete('/{id}', [OrderController::class, 'remove']);
+        Route::get('/all', [OrderController::class, 'all'])->middleware('admin');
+        Route::patch('/{id}', [OrderController::class, 'edit'])->middleware('admin');
+        Route::delete('/{id}', [OrderController::class, 'remove'])->middleware('admin');
     });
+
+    Route::prefix('brand')->group(function () {
+        Route::post('/', [BrandController::class, 'create'])->middleware('admin');
+        Route::patch('/{id}', [BrandController::class, 'edit'])->middleware('admin');
+        Route::delete('/{id}', [BrandController::class, 'remove'])->middleware('admin');
+    });
+
+    Route::prefix('category')->group(function () {
+        Route::post('/', [CategoryController::class, 'create'])->middleware('admin');
+        Route::patch('/{id}', [CategoryController::class, 'edit'])->middleware('admin');
+        Route::delete('/{id}', [CategoryController::class, 'remove'])->middleware('admin');
+    });
+
+    Route::prefix('product')->group(function () {
+        Route::post('/', [ProductController::class, 'create'])->middleware('admin');
+        Route::post('/{id}', [ProductController::class, 'edit'])->middleware('admin');
+        Route::delete('/{id}', [ProductController::class, 'remove'])->middleware('admin');
+    });
+
+
+    Route::prefix('blog')->group(function () {
+        Route::post('/', [BlogController::class, 'create'])->middleware('admin');
+        Route::post('/{id}', [BlogController::class, 'edit'])->middleware('admin');
+        Route::delete('/{id}', [BlogController::class, 'remove'])->middleware('admin');
+    });
+
+    Route::prefix('report')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->middleware('admin');
+        Route::get('/order', [ReportController::class, 'order'])->middleware('admin');
+    });
+});
+
+
+Route::prefix('order')->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
+    Route::get('/detail/{id}', [OrderController::class, 'detail']);
+    Route::post('/', [OrderController::class, 'create']);
 });
 
 Route::prefix('brand')->group(function () {
     Route::get('/', [BrandController::class, 'all']);
     Route::get('/{id}', [BrandController::class, 'detail']);
-    Route::post('/', [BrandController::class, 'create']);
-    Route::patch('/{id}', [BrandController::class, 'edit']);
-    Route::delete('/{id}', [BrandController::class, 'remove']);
 });
 
 Route::prefix('category')->group(function () {
     Route::get('/', [CategoryController::class, 'all']);
     Route::get('/{id}', [CategoryController::class, 'detail']);
-    Route::post('/', [CategoryController::class, 'create']);
-    Route::patch('/{id}', [CategoryController::class, 'edit']);
-    Route::delete('/{id}', [CategoryController::class, 'remove']);
 });
+
 Route::prefix('product')->group(function () {
     Route::get('/', [ProductController::class, 'all']);
     Route::get('/{id}', [ProductController::class, 'detail']);
-    Route::post('/', [ProductController::class, 'create']);
-    Route::post('/{id}', [ProductController::class, 'edit']);
-    Route::delete('/{id}', [ProductController::class, 'remove']);
 });
+
 Route::prefix('blog')->group(function () {
     Route::get('/', [BlogController::class, 'all']);
     Route::get('/{id}', [BlogController::class, 'detail']);
-    Route::post('/', [BlogController::class, 'create']);
-    Route::post('/{id}', [BlogController::class, 'edit']);
-    Route::delete('/{id}', [BlogController::class, 'remove']);
 });
