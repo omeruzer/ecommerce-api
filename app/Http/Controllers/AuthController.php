@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
         } else {
             $data = [
                 'email' =>  $request->email,
@@ -58,7 +59,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
         } else {
             $user = User::create([
                 'name' => $request->name,
@@ -94,7 +95,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
         } else {
             $data = [
                 'name' => $request->name,
@@ -102,6 +103,29 @@ class AuthController extends Controller
 
             if ($request->email) {
                 $data['email'] = $request->email;
+            }
+
+            $userInfo = UserInfo::where('user_id', Auth::id())->first();
+            if ($request->address) {
+                $userInfo->address = $request->address;
+                $userInfo->save();
+            }
+
+            if ($request->postal_code) {
+                $userInfo->postal_code = $request->postal_code;
+                $userInfo->save();
+            }
+            if ($request->city) {
+                $userInfo->city = $request->city;
+                $userInfo->save();
+            }
+            if ($request->country) {
+                $userInfo->country = $request->country;
+                $userInfo->save();
+            }
+            if ($request->phone) {
+                $userInfo->phone = $request->phone;
+                $userInfo->save();
             }
 
             $user = User::where('id', Auth::id())->update($data);
@@ -130,7 +154,7 @@ class AuthController extends Controller
 
 
         if ($validator->fails()) {
-            return response()->json(["status" => 400, "errors" => $validator->errors()],400);
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
         } else {
             $user = User::where('id', Auth::id())->first();
             $userPass = $user->password;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -31,7 +32,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/{id}', [OrderController::class, 'edit']);
         Route::delete('/{id}', [OrderController::class, 'remove']);
     });
-
 });
 
 Route::prefix('brand')->group(function () {
@@ -55,4 +55,11 @@ Route::prefix('product')->group(function () {
     Route::post('/', [ProductController::class, 'create']);
     Route::post('/{id}', [ProductController::class, 'edit']);
     Route::delete('/{id}', [ProductController::class, 'remove']);
+});
+Route::prefix('blog')->group(function () {
+    Route::get('/', [BlogController::class, 'all']);
+    Route::get('/{id}', [BlogController::class, 'detail']);
+    Route::post('/', [BlogController::class, 'create']);
+    Route::post('/{id}', [BlogController::class, 'edit']);
+    Route::delete('/{id}', [BlogController::class, 'remove']);
 });

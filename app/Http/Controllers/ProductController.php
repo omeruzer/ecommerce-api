@@ -64,11 +64,9 @@ class ProductController extends Controller
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
 
-                // Benzersiz bir dosya adı oluşturun
                 $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
 
-                // Dosyayı saklayın
-                Storage::disk('public')->put("media/" . $fileName, file_get_contents($image));
+                Storage::disk('public')->put("media/products/" . $fileName, file_get_contents($image));
 
                 $product->image = $fileName;
 
@@ -129,10 +127,10 @@ class ProductController extends Controller
 
                 $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
 
-                Storage::disk('public')->put("media/" . $fileName, file_get_contents($image));
+                Storage::disk('public')->put("media/products/" . $fileName, file_get_contents($image));
 
                 if ($product->image) {
-                    Storage::disk('public')->delete("media/" . $product->image);
+                    Storage::disk('public')->delete("media/products/" . $product->image);
                 }
 
                 $product->image = $fileName;
@@ -152,7 +150,7 @@ class ProductController extends Controller
             return response()->json(['data' => 'Product not found!', 'status' => 404], 404);
         }
         if ($product->image) {
-            Storage::disk('public')->delete("media/" . $product->image);
+            Storage::disk('public')->delete("media/products/" . $product->image);
         }
 
         $product->delete();
