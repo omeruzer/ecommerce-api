@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -16,6 +17,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'user']);
     Route::patch('user-update', [AuthController::class, 'authUserUpdate']);
     Route::patch('user-password', [AuthController::class, 'userPass']);
+
+    Route::prefix('cart')->group(function () {
+        Route::get('/', [CartController::class, 'index']);
+        Route::post('/action', [CartController::class, 'action']);
+    });
 
 });
 
@@ -41,3 +47,4 @@ Route::prefix('product')->group(function () {
     Route::post('/{id}', [ProductController::class, 'edit']);
     Route::delete('/{id}', [ProductController::class, 'remove']);
 });
+
