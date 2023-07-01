@@ -17,7 +17,7 @@ class CartController extends Controller
         if (!$cart) {
             return response()->json(['data' => 'Cart not found!', 'status' => 404], 404);
         }
-
+        $data = [];
         return response()->json($cart);
     }
     public function action(Request $request)
@@ -35,12 +35,12 @@ class CartController extends Controller
             $cart = Cart::where('user_id', Auth::id())->first();
 
             if (!$cart) {
-                return response()->json(["status" => 404, "data" => "Cart not found!"], 404);
+                $cart = Cart::create([
+                    'user_id' => Auth::id()
+                ]);
             }
 
-            $action = $request->action;
-
-            switch ($action) {
+            switch ($request->action) {
                 case 'increase':
                     $cartProduct = CartProducts::where('cart_id', $cart->id)->where('product_id', $request->product_id)->first();
 
@@ -66,7 +66,7 @@ class CartController extends Controller
                     $cartProduct->quantity -= 1;
                     $quantity = $cartProduct->quantity;
 
-                    if ($quantity == 0) {
+                    if ($quantity <= 0) {
                         $cartProduct->delete();
                     } else {
                         $cartProduct->save();

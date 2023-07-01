@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'index']);
         Route::post('/action', [CartController::class, 'action']);
+    });
+
+    Route::prefix('order')->group(function () {
+        Route::get('/', [OrderController::class, 'index']);
+        Route::get('/{id}', [OrderController::class, 'detail']);
+        Route::post('/', [OrderController::class, 'create']);
+        Route::patch('/{id}', [OrderController::class, 'edit']);
+        Route::delete('/{id}', [OrderController::class, 'remove']);
     });
 
 });
@@ -47,4 +56,3 @@ Route::prefix('product')->group(function () {
     Route::post('/{id}', [ProductController::class, 'edit']);
     Route::delete('/{id}', [ProductController::class, 'remove']);
 });
-

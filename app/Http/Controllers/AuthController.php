@@ -72,7 +72,7 @@ class AuthController extends Controller
 
     public function user()
     {
-        $user = User::find(Auth::user());
+        $user = User::with('info')->find(Auth::user());
         return response()->json($user);
     }
 
