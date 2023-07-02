@@ -24,13 +24,13 @@ class OrderController extends Controller
 {
     public function all()
     {
-        $orders = Order::with('products.product', 'status')->paginate(10);
+        $orders = Order::with('products.product', 'status')->orderByDesc('id')->paginate(10);
 
         return response()->json($orders);
     }
     public function index()
     {
-        $orders = Order::with('products.product', 'status')->where('user_id', Auth::id())->paginate(10);
+        $orders = Order::with('products.product', 'status')->where('user_id', Auth::id())->orderByDesc('id')->paginate(10);
 
         return response()->json($orders);
     }

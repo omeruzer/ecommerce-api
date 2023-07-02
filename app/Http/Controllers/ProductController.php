@@ -10,11 +10,44 @@ use Str;
 
 class ProductController extends Controller
 {
-    public function all()
+    public function all(Request $request)
     {
-        $products = Product::with('brand', 'category')->paginate(10);
+        $data = [];
 
-        return response()->json($products);
+        $products = Product::with('brand', 'category');
+
+        if ($request->has('search')) {
+            $products->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('code', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('category')) {
+            $products->where('category_id', $request->category);
+        }
+
+        if ($request->has('brand')) {
+            $products->where('brand_id', $request->brand);
+        }
+
+        if ($request->has('sortBy')) {
+            if ($request->sortBy == 'a-z') {
+                $products->orderBy('name', 'ASC');
+            } else if ($request->sortBy == 'z-a') {
+                $products->orderBy('name', 'DESC');
+            } else if ($request->sortBy == 'cheap') {
+                $products->orderBy('price', 'ASC');
+            } else if ($request->sortBy == 'expensive') {
+                $products->orderBy('price', 'DESC');
+            } else if ($request->sortBy == 'first') {
+                $products->orderBy('created_at', 'ASC');
+            } else if ($request->sortBy == 'last') {
+                $products->orderBy('created_at', 'DESC');
+            }
+        }
+
+        $data = $products->paginate(10);
+
+        return response()->json($data);
     }
 
     public function detail($id)

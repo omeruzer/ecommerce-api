@@ -12,7 +12,7 @@ class BlogController extends Controller
 {
     public function all()
     {
-        $blogs = Blog::paginate(10);
+        $blogs = Blog::orderByDesc('id')->paginate(10);
 
         return response()->json($blogs);
     }

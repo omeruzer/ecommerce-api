@@ -12,7 +12,7 @@ class FavoriteController extends Controller
 {
     public function index()
     {
-        $data = Favorite::with('product')->where('user_id', Auth::id())->paginate(10);
+        $data = Favorite::with('product')->where('user_id', Auth::id())->orderByDesc('id')->paginate(10);
 
         return response()->json($data);
     }

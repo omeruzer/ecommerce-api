@@ -11,7 +11,7 @@ class BrandController extends Controller
 {
     public function all()
     {
-        $brands = Brand::paginate(10);
+        $brands = Brand::orderBy('name','ASC')->paginate(10);
 
         return response()->json($brands);
     }

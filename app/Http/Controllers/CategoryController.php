@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function all()
     {
-        $categories = Category::with('subCategories')->whereNull('parent_id')->paginate(10);
+        $categories = Category::with('subCategories')->whereNull('parent_id')->orderBy('name','ASC')->paginate(10);
 
         return response()->json($categories);
     }
