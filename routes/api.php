@@ -6,6 +6,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -97,6 +98,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix('social-media')->group(function () {
         Route::post('/', [SocialMediaController::class, 'create']);
+    });
+
+    Route::prefix('favorite')->group(function () {
+        Route::get('/', [FavoriteController::class, 'index']);
+        Route::post('/', [FavoriteController::class, 'create']);
     });
 });
 
