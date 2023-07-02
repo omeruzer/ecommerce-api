@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('newsletter')->group(function () {
         Route::get('/', [NewsletterController::class, 'index'])->middleware('admin');
         Route::delete('/{id}', [NewsletterController::class, 'remove'])->middleware('admin');
+    });
+
+    Route::prefix('user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->middleware('admin');
+        Route::get('/{id}', [UserController::class, 'detail'])->middleware('admin');
+        Route::post('/', [UserController::class, 'create'])->middleware('admin');
+        Route::post('/permission', [UserController::class, 'permission'])->middleware('admin');
+        Route::patch('/{id}', [UserController::class, 'edit'])->middleware('admin');
+        Route::delete('/{id}', [UserController::class, 'remove'])->middleware('admin');
     });
 });
 

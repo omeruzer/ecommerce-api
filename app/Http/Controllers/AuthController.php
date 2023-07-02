@@ -67,6 +67,10 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
+            UserInfo::create([
+                'user_id' => $user->id
+            ]);
+
             return response()->json(['status' => 200, 'message' => 'Success', 'user' => $user]);
         }
     }
