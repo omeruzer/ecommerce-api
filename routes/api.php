@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
@@ -70,11 +71,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->middleware('admin');
         Route::get('/order', [ReportController::class, 'order'])->middleware('admin');
     });
+
+    Route::prefix('newsletter')->group(function () {
+        Route::get('/', [NewsletterController::class, 'index'])->middleware('admin');
+        Route::delete('/{id}', [NewsletterController::class, 'remove'])->middleware('admin');
+    });
 });
 
 Route::prefix('brand')->group(function () {
     Route::get('/', [BrandController::class, 'all']);
     Route::get('/{id}', [BrandController::class, 'detail']);
+});
+Route::prefix('newsletter')->group(function () {
+    Route::post('/', [NewsletterController::class, 'create']);
 });
 
 Route::prefix('category')->group(function () {
