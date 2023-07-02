@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Shipping;
 use App\Models\ShippingStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -65,9 +66,9 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
         } else {
-
+            $shipping = Shipping::first();
             $subtotal = 0;
-            $shippingPrice = 45;
+            $shippingPrice = $shipping->price;
             $amount = 0;
 
             Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -138,7 +139,7 @@ class OrderController extends Controller
 
                 $cart->delete();
 
-                return response()->json($payment);
+                return response()->json(['status' => 200, 'data' => 'Payment transaction completed'], 200);
             }
 
             return response()->json(['status' => 400, 'data' => 'Error'], 400);

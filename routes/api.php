@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ShippingController;
 use App\Http\Middleware\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [BlogController::class, 'create'])->middleware('admin');
         Route::post('/{id}', [BlogController::class, 'edit'])->middleware('admin');
         Route::delete('/{id}', [BlogController::class, 'remove'])->middleware('admin');
+    });
+
+    Route::prefix('shipping')->group(function () {
+        Route::post('/', [ShippingController::class, 'index'])->middleware('admin');
     });
 
     Route::prefix('report')->group(function () {
