@@ -73,7 +73,6 @@ class OrderController extends Controller
             Stripe::setApiKey(env('STRIPE_SECRET'));
 
             $cart = Cart::with('products.product')->where('user_id', Auth::id())->first();
-
             if (!$cart) {
                 return response()->json(["status" => 404, "data" => 'Cart not found'], 404);
             }

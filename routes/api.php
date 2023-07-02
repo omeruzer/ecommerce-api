@@ -29,6 +29,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('order')->group(function () {
         Route::get('/all', [OrderController::class, 'all'])->middleware('admin');
+        Route::get('/', [OrderController::class, 'index']);
+        Route::get('/detail/{id}', [OrderController::class, 'detail']);
+        Route::post('/', [OrderController::class, 'create']);
         Route::patch('/{id}', [OrderController::class, 'edit'])->middleware('admin');
         Route::delete('/{id}', [OrderController::class, 'remove'])->middleware('admin');
     });
@@ -62,13 +65,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->middleware('admin');
         Route::get('/order', [ReportController::class, 'order'])->middleware('admin');
     });
-});
-
-
-Route::prefix('order')->group(function () {
-    Route::get('/', [OrderController::class, 'index']);
-    Route::get('/detail/{id}', [OrderController::class, 'detail']);
-    Route::post('/', [OrderController::class, 'create']);
 });
 
 Route::prefix('brand')->group(function () {
