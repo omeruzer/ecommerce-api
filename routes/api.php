@@ -11,6 +11,7 @@ use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\UserController;
@@ -97,13 +98,23 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [FaqController::class, 'remove'])->middleware('admin');
     });
     Route::prefix('social-media')->group(function () {
-        Route::post('/', [SocialMediaController::class, 'create']);
+        Route::post('/', [SocialMediaController::class, 'create'])->middleware('admin');
     });
 
     Route::prefix('favorite')->group(function () {
         Route::get('/', [FavoriteController::class, 'index']);
         Route::post('/', [FavoriteController::class, 'create']);
     });
+
+    Route::prefix('settings')->group(function () {
+        Route::post('/edit', [SettingsController::class, 'edit'])->middleware('admin');
+        Route::post('/logo', [SettingsController::class, 'logo'])->middleware('admin');
+        Route::post('/favicon', [SettingsController::class, 'favicon'])->middleware('admin');
+    });
+});
+
+Route::prefix('settings')->group(function () {
+    Route::get('/', [SettingsController::class, 'index']);
 });
 
 Route::prefix('faq')->group(function () {
