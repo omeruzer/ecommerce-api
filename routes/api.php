@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -86,6 +87,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/{id}', [UserController::class, 'edit'])->middleware('admin');
         Route::delete('/{id}', [UserController::class, 'remove'])->middleware('admin');
     });
+    Route::prefix('faq')->group(function () {
+        Route::get('/', [FaqController::class, 'index'])->middleware('admin');
+        Route::get('/detail/{id}', [FaqController::class, 'detail'])->middleware('admin');
+        Route::post('/', [FaqController::class, 'create'])->middleware('admin');
+        Route::patch('/{id}', [FaqController::class, 'edit'])->middleware('admin');
+        Route::delete('/{id}', [FaqController::class, 'remove'])->middleware('admin');
+    });
+});
+
+Route::prefix('faq')->group(function () {
+    Route::get('/all', [FaqController::class, 'all']);
 });
 
 Route::prefix('brand')->group(function () {
