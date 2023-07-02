@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-
+use Str;
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -196,7 +196,7 @@ class AuthController extends Controller
             if (!$user) {
                 return response()->json(["status" => 404, "data" => 'User not found'], 404);
             }
-            $forgotToken = 1234;
+            $forgotToken = Str::random(32);;
 
             $user->forgot_token = $forgotToken;
             $user->save();
