@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgotPasswordMail;
 use App\Mail\WelcomeMail;
 use App\Models\User;
 use App\Models\UserInfo;
@@ -175,6 +176,71 @@ class AuthController extends Controller
             } else {
                 return response()->json(['status' => false, 'msg' => 'passwords do not match']);
             }
+        }
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $rules = [
+            'email' => ['required', 'email'],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
+        } else {
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user) {
+                return response()->json(["status" => 404, "data" => 'User not found'], 404);
+            }
+            $forgotToken = 1234;
+
+            $user->forgot_token = $forgotToken;
+            $user->save();
+
+            Mail::to($user->email)->send(new ForgotPasswordMail($forgotToken));
+
+            return response()->json(['status' => 200, 'data' => 'Send Mail']);
+        }
+    }
+    public function resetPassword(Request $request)
+    {
+        $rules = [
+            'code' => ['required'],
+            'password' => [
+                'required',
+                'string',
+                'min:10',             // En az 10 karakter
+                'regex:/[a-z]/',      // en az bir adet a-z
+                'regex:/[A-Z]/',      // en az bir adet A-Z
+                'regex:/[0-9]/',      // en az bir adet 0-9
+                'regex:/[@$!%*#?&]/', // en az bir adet özel karakter,
+                'confirmed'           // Konfirme edilmiş olmalı
+            ]
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response()->json(["status" => 400, "errors" => $validator->errors()], 400);
+        } else {
+            $code = $request->code;
+
+            $user = User::where('forgot_token', $code)->first();
+
+            if (!$user) {
+                return response()->json(["status" => 404, "data" => 'Invalid Code'], 404);
+            }
+
+            $user->password = Hash::make($request->password);
+            $user->forgot_token = null;
+            $user->save();
+
+            return response()->json(['status' => 200, 'data' => 'Success']);
         }
     }
 }

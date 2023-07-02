@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'user']);
     Route::patch('user-update', [AuthController::class, 'authUserUpdate']);
     Route::patch('user-password', [AuthController::class, 'userPass']);
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
     Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'index']);
