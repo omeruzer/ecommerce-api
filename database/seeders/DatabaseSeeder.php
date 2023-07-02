@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(NewsletterSeeder::class);
         $this->call(FAQSeeder::class);
         $this->call(FavoriteSeeder::class);
+        $this->call(ContactSeeder::class);
     }
 }

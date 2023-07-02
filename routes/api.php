@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\NewsletterController;
@@ -106,11 +107,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [FavoriteController::class, 'create']);
     });
 
+    Route::prefix('contact')->group(function () {
+        Route::post('/', [ContactController::class, 'create'])->middleware('admin');
+    });
+
     Route::prefix('settings')->group(function () {
         Route::post('/edit', [SettingsController::class, 'edit'])->middleware('admin');
         Route::post('/logo', [SettingsController::class, 'logo'])->middleware('admin');
         Route::post('/favicon', [SettingsController::class, 'favicon'])->middleware('admin');
     });
+});
+
+Route::prefix('contact')->group(function () {
+    Route::get('/', [ContactController::class, 'index']);
 });
 
 Route::prefix('settings')->group(function () {
