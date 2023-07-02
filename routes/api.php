@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
 use Illuminate\Http\Request;
@@ -94,10 +95,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/{id}', [FaqController::class, 'edit'])->middleware('admin');
         Route::delete('/{id}', [FaqController::class, 'remove'])->middleware('admin');
     });
+    Route::prefix('social-media')->group(function () {
+        Route::post('/', [SocialMediaController::class, 'create']);
+    });
 });
 
 Route::prefix('faq')->group(function () {
     Route::get('/all', [FaqController::class, 'all']);
+});
+Route::prefix('social-media')->group(function () {
+    Route::get('/', [SocialMediaController::class, 'index']);
 });
 
 Route::prefix('brand')->group(function () {
