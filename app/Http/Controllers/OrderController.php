@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewOrderMail;
+use App\Mail\OrderStatusMail;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -10,6 +12,7 @@ use App\Models\ShippingStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Stripe\Charge;
 use Stripe\Customer;
@@ -139,6 +142,8 @@ class OrderController extends Controller
 
                 $cart->delete();
 
+                Mail::to($request->email)->send(new NewOrderMail($order));
+
                 return response()->json(['status' => 200, 'data' => 'Payment transaction completed'], 200);
             }
 
@@ -160,7 +165,7 @@ class OrderController extends Controller
         } else {
             Stripe::setApiKey(env('STRIPE_SECRET'));
 
-            $order = Order::find($id);
+            $order = Order::with('status')->find($id);
 
             if (!$order) {
                 return response()->json(['status' => 404, 'data' => 'Order not found'], 404);
@@ -189,6 +194,10 @@ class OrderController extends Controller
             }
 
             $order->save();
+
+            $data = $status->title;
+
+            Mail::to($order->email)->send(new OrderStatusMail($data));
 
             return response()->json(['status' => 200, 'data' => 'Updated'], 200);
         }

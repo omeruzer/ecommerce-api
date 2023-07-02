@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -70,6 +72,8 @@ class AuthController extends Controller
             UserInfo::create([
                 'user_id' => $user->id
             ]);
+
+            Mail::to($user->email)->send(new WelcomeMail($user));
 
             return response()->json(['status' => 200, 'message' => 'Success', 'user' => $user]);
         }

@@ -80,6 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('newsletter')->group(function () {
         Route::get('/', [NewsletterController::class, 'index'])->middleware('admin');
+        Route::post('/mail', [NewsletterController::class, 'mail'])->middleware('admin');
         Route::delete('/{id}', [NewsletterController::class, 'remove'])->middleware('admin');
     });
 
